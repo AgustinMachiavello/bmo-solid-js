@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vite/client"],
+    "noEmit": true,
+    "isolatedModules": true,
+    "baseUrl": "./src", // This is to avoid adding the ./src prefix to each path below.
+    "paths": {
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@utils/*": ["utils/*"],
+      "@config/*": ["config/*"]
+    }
+  }
+}
