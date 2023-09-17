@@ -1,5 +1,7 @@
 import SamJS from "sam-js";
 
+import { TextToPhonemes } from "./Mouth/reciter";
+
 type AlphabetObject = {
   [key: string]: string;
 };
@@ -59,9 +61,11 @@ const Sam = new SamJS();
 
 // Function to generate a Hanna-Barbera-style mouth sequence
 const getMouthShapes = (text: string): MouthMap => {
-  const formattedText = text.toLowerCase();
+  const formattedText = TextToPhonemes(text).toLowerCase();
   const shapeSequence = [];
   const characterSequence = [];
+
+  console.warn(formattedText);
 
   for (let i = 0; i < formattedText.length; i++) {
     const character = formattedText[i];
@@ -70,8 +74,9 @@ const getMouthShapes = (text: string): MouthMap => {
     if (mouthShape) {
       shapeSequence.push(mouthShape);
     } else {
+      const shape: string = shapeSequence[i - 1] || DEFAULT_MOUTH_SHAPE;
       // Default to a closed mouth for unknown phonemes
-      shapeSequence.push(DEFAULT_MOUTH_SHAPE);
+      shapeSequence.push(shape);
     }
 
     characterSequence.push(character);

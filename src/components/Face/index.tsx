@@ -9,8 +9,8 @@ interface FaceProps {
   text: string;
 }
 
-const MOUTH_SPEED = 80; // milliseconds
-const VOICE_SPEED = 70;
+const MOUTH_SPEED = 50; // milliseconds
+const VOICE_SPEED = 60;
 
 const Sam = new SamJs({
   speed: VOICE_SPEED,
@@ -46,6 +46,7 @@ const Face = (props: FaceProps): JSX.Element => {
 
   const stopTalking = () => {
     clearInterval(mouthInterval);
+    setCurrentMouthShape(DEFAULT_MOUTH_SHAPE);
     mouthShapeIndex = 0;
     mouthInterval = 0;
   };
