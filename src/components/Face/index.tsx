@@ -1,34 +1,54 @@
-import { createSignal, createEffect } from "solid-js";
+import { createSignal, createEffect, onCleanup, JSX } from "solid-js";
 
 import Mouth from "../Mouth";
-import { getMouthShapes } from "../../utils/mouth-service";
+import { getMouthShapes, DEFAULT_MOUTH_SHAPE } from "../../utils/mouth-service";
 
-const MOUTH_SPEED = 5000; // milliseconds
+interface FaceProps {
+  text: string;
+}
 
-const Face = ({ text }) => {
-  const [currentMouthShape, setCurrentMouthShape] = createSignal();
-  const [currentWord, setCurrentWord] = createSignal();
+const MOUTH_SPEED = 80; // milliseconds
 
-  // Update the current mouth expression every X seconds
+const Face = (props: FaceProps): JSX.Element => {
+  // Signals
+  const [currentMouthShape, setCurrentMouthShape] =
+    createSignal(DEFAULT_MOUTH_SHAPE);
+  const [subtitles, setSubtitles] = createSignal("");
+
+  // Data
+  const mouthMap = getMouthShapes(props.text);
+  let mouthShapeIndex = 0;
+  let mouthInterval: number;
+
   createEffect(() => {
-    const mouthShapes = getMouthShapes(text);
-    console.warn("mouthShapes", mouthShapes);
-    let letterIndex = 0;
+    if (!mouthMap) return;
 
-    const mouthTimeout = setInterval(() => {
-      console.warn("iteration", letterIndex);
-      // Update current letter
-      setCurrentMouthShape(mouthShapes[letterIndex]);
+    mouthInterval = setInterval(() => {
+      const shapes = mouthMap.shapes;
+      const characters = mouthMap.characters;
 
-      // Next letter
-      letterIndex += 1;
+      // Update subtitles
+      setSubtitles(subtitles() + characters[mouthShapeIndex]);
+
+      // Update mouth shape
+      setCurrentMouthShape(shapes[mouthShapeIndex]);
+
+      if (mouthShapeIndex === shapes.length - 1) {
+        clearInterval(mouthInterval);
+      }
+
+      mouthShapeIndex += 1;
     }, MOUTH_SPEED);
   });
 
+  onCleanup(() => clearInterval(mouthInterval));
+
   return (
-    <div>
-      Face
-      <Mouth shape={currentMouthShape} />
+    <div style={{ width: "100%" }}>
+      <Mouth shape={currentMouthShape()} />
+      Shape: {currentMouthShape()}
+      Subtitles:
+      <div>{subtitles()}</div>
     </div>
   );
 };

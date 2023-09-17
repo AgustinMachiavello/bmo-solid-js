@@ -49,22 +49,28 @@ const LETTER_TO_MOUTH_MAP: AlphabetObject = {
 
 // Function to generate a Hanna-Barbera-style mouth sequence
 const getMouthShapes = (text: string) => {
-  const textInUpperCase = text.toLowerCase();
-  const sequence = [];
+  const formattedText = text.toLowerCase();
+  const shapeSequence = [];
+  const characterSequence = [];
 
-  for (let i = 0; i < textInUpperCase.length; i++) {
-    const phoneme = textInUpperCase[i];
-    const mouthPosition = LETTER_TO_MOUTH_MAP[phoneme];
+  for (let i = 0; i < formattedText.length; i++) {
+    const character = formattedText[i];
+    const mouthShape = LETTER_TO_MOUTH_MAP[character];
 
-    if (mouthPosition) {
-      sequence.push(mouthPosition);
+    if (mouthShape) {
+      shapeSequence.push(mouthShape);
     } else {
       // Default to a closed mouth for unknown phonemes
-      sequence.push(DEFAULT_MOUTH_SHAPE);
+      shapeSequence.push(DEFAULT_MOUTH_SHAPE);
     }
+
+    characterSequence.push(character);
   }
 
-  return sequence;
+  return {
+    shapes: shapeSequence,
+    characters: characterSequence,
+  };
 };
 
-export { getMouthShapes, MOUTH_SHAPES };
+export { getMouthShapes, MOUTH_SHAPES, DEFAULT_MOUTH_SHAPE };
