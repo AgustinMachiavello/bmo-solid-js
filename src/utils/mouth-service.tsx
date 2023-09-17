@@ -1,6 +1,13 @@
+import SamJS from "sam-js";
+
 type AlphabetObject = {
   [key: string]: string;
 };
+
+export interface MouthMap {
+  shapes: string[];
+  characters: string[];
+}
 
 const MOUTH_SHAPES = {
   a: "A",
@@ -47,8 +54,11 @@ const LETTER_TO_MOUTH_MAP: AlphabetObject = {
   z: MOUTH_SHAPES.b,
 };
 
+// Sam
+const Sam = new SamJS();
+
 // Function to generate a Hanna-Barbera-style mouth sequence
-const getMouthShapes = (text: string) => {
+const getMouthShapes = (text: string): MouthMap => {
   const formattedText = text.toLowerCase();
   const shapeSequence = [];
   const characterSequence = [];
